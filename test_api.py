@@ -33,6 +33,10 @@ def test_csv_loading():
 
 # Tester la fonction de prédiction de l'API
 def test_prediction(client):
+    # Charger le modèle ici
+    model_path = os.path.join(current_directory, "saved_model", "best_lgbmb.joblib")
+    model = joblib.load(model_path)
+
     csv_path = os.path.join(current_directory, "Simulations", "Data", "df_train.csv")
     df = pd.read_csv(csv_path)
     sk_id_curr = df.iloc[0]['SK_ID_CURR']
@@ -41,6 +45,4 @@ def test_prediction(client):
     data = response.get_json()
     prediction = data['probability']
 
-    assert model is not None, "Erreur dans le chargement du modèle."
-
-
+    assert prediction is not None, "Erreur dans la prédiction."
