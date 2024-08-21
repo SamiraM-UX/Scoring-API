@@ -1,21 +1,10 @@
 import os
-import urllib.request
 import joblib
 import pandas as pd
 import shap
 from flask import Flask, jsonify, request
 import warnings
 warnings.filterwarnings("ignore", message="LightGBM binary classifier with TreeExplainer shap values output has changed to a list of ndarray")
-
-# Script pour télécharger le fichier volumineux depuis GitHub
-url = "https://github.com/SamiraM-UX/Scoring-API/releases/download/v1.0/df_train_smote_corrected.joblib"
-output = "saved_model/df_train_smote_corrected.joblib"
-
-# Télécharger le fichier seulement s'il n'existe pas déjà
-if not os.path.exists(output):
-    print(f"Téléchargement de {output} depuis GitHub Releases...")
-    urllib.request.urlretrieve(url, output)
-    print("Téléchargement terminé.")
 
 # Initialisation de l'application Flask
 app = Flask(__name__)
@@ -29,7 +18,7 @@ model_path = os.path.join(current_directory, "saved_model", "best_lgbmb.joblib")
 model = joblib.load(model_path)
 
 # Charger le DataFrame corrigé avec SK_ID_CURR
-df_train_smote_path = os.path.join(current_directory, "saved_model", "df_train_smote_corrected.joblib")
+df_train_smote_path = os.path.join(current_directory, "df_train_smote_corrected.joblib")
 df_train_smote = joblib.load(df_train_smote_path)
 
 print("Modèle et DataFrame chargés avec succès.")
@@ -81,4 +70,3 @@ def predict():
 if __name__ == "__main__":
     port = os.environ.get("PORT", 5000)
     app.run(debug=False, host="0.0.0.0", port=int(port))
-
