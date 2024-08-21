@@ -1,3 +1,4 @@
+import urllib.request
 import os
 import joblib
 import pandas as pd
@@ -5,6 +6,17 @@ import shap
 from flask import Flask, jsonify, request
 import warnings
 warnings.filterwarnings("ignore", message="LightGBM binary classifier with TreeExplainer shap values output has changed to a list of ndarray")
+
+# URL directe vers votre fichier hébergé sur la release GitHub
+url = "https://github.com/SamiraM-UX/Scoring-API/releases/download/v1.0/df_train_smote_corrected.joblib"
+# Chemin pour sauvegarder le fichier téléchargé
+output = "saved_model/df_train_smote_corrected.joblib"
+
+# Télécharger le fichier seulement s'il n'existe pas déjà
+if not os.path.exists(output):
+    print(f"Téléchargement de {output} depuis GitHub Releases...")
+    urllib.request.urlretrieve(url, output)
+    print("Téléchargement terminé.")
 
 # Initialisation de l'application Flask
 app = Flask(__name__)
