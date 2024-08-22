@@ -20,7 +20,7 @@ model = joblib.load(model_path)
 # Charger tous les segments du DataFrame
 df_parts = []
 for i in range(10):  # Assurez-vous que le nombre de segments correspond à ce que vous avez créé
-    part_path = os.path.join(current_directory, "saved_model", f"df_train_smote_part_{i}.joblib")
+    part_path = os.path.join(current_directory, "saved_model","saved_segments", f"df_train_smote_part_{i}.joblib")
     df_part = joblib.load(part_path)
     df_parts.append(df_part)
 
