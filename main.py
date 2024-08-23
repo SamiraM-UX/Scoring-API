@@ -19,7 +19,7 @@ model = joblib.load(model_path)
 
 # Charger tous les segments du DataFrame une seule fois au démarrage
 df_parts = []
-for i in range(10):  # Assurez-vous que le nombre de segments correspond à ce que vous avez créé
+for i in range(10):  
     part_path = os.path.join(current_directory, "saved_segments", f"df_train_smote_part_{i}.joblib")
     df_part = joblib.load(part_path)
     df_parts.append(df_part)
@@ -57,12 +57,12 @@ def predict():
     explainer = shap.TreeExplainer(model)
     shap_values = explainer.shap_values(sample_for_prediction)
 
-    # Si shap_values est une liste avec un seul élément, utilisez le premier élément
+    # Si shap_values est une liste avec un seul élément, utiliser le premier élément
     if isinstance(shap_values, list) and len(shap_values) == 1:
         shap_values = shap_values[0]
 
     # Limiter les données renvoyées pour la lisibilité (par exemple, les 10 premières features)
-    num_features_to_show = 10  # Vous pouvez changer ce nombre pour afficher plus ou moins de features
+    num_features_to_show = 10 
     limited_shap_values = shap_values[0][:num_features_to_show].tolist()
     limited_feature_names = sample_for_prediction.columns[:num_features_to_show].tolist()
     limited_feature_values = sample_for_prediction.values[0][:num_features_to_show].tolist()
