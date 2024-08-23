@@ -13,20 +13,21 @@ app = Flask(__name__)
 # Définir le répertoire courant
 current_directory = os.path.dirname(os.path.abspath(__file__))
 
-# Charger le modèle en dehors de la clause if __name__ == "__main__":
+# Charger le modèle en dehors de la clause if __name__ == "__main__"
 model_path = os.path.join(current_directory, "saved_model", "best_lgbmb.joblib")
 model = joblib.load(model_path)
 
-# Fonction pour trouver l'échantillon dans les segments
-def find_sk_id_curr(sk_id_curr):
-    for i in range(10):  # Assurez-vous que le nombre de segments correspond à ce que vous avez créé
-        part_path = os.path.join(current_directory, "saved_segments", f"df_train_smote_part_{i}.joblib")
-        df_part = joblib.load(part_path)
-        
-        if sk_id_curr in df_part['SK_ID_CURR'].values:
-            return df_part[df_part['SK_ID_CURR'] == sk_id_curr]
-    
-    return pd.DataFrame()  # Retourne un DataFrame vide si SK_ID_CURR n'est trouvé dans aucun segment
+# Charger tous les segments du DataFrame une seule fois au démarrage
+df_parts = []
+for i in range(10):  # Assurez-vous que le nombre de segments correspond à ce que vous avez créé
+    part_path = os.path.join(current_directory, "saved_segments", f"df_train_smote_part_{i}.joblib")
+    df_part = joblib.load(part_path)
+    df_parts.append(df_part)
+
+# Combiner les segments en un seul DataFrame
+df_train_smote = pd.concat(df_parts, ignore_index=True)
+
+print("Modèle et DataFrame chargés avec succès.")
 
 @app.route("/")
 def home():
@@ -39,7 +40,8 @@ def predict():
     except (TypeError, ValueError):
         return jsonify({"error": "SK_ID_CURR est manquant ou invalide dans la requête"}), 400
 
-    sample = find_sk_id_curr(sk_id_curr)
+    # Rechercher l'échantillon correspondant à SK_ID_CURR dans df_train_smote
+    sample = df_train_smote[df_train_smote['SK_ID_CURR'] == sk_id_curr]
 
     if sample.empty:
         return jsonify({"error": f"Aucun échantillon trouvé pour SK_ID_CURR: {sk_id_curr}"}), 404
@@ -60,20 +62,18 @@ def predict():
         shap_values = shap_values[0]
 
     # Limiter les données renvoyées pour la lisibilité (par exemple, les 10 premières features)
-    num_features_to_show = 10
+    num_features_to_show = 10  # Vous pouvez changer ce nombre pour afficher plus ou moins de features
     limited_shap_values = shap_values[0][:num_features_to_show].tolist()
     limited_feature_names = sample_for_prediction.columns[:num_features_to_show].tolist()
     limited_feature_values = sample_for_prediction.values[0][:num_features_to_show].tolist()
 
     return jsonify({
-        'probability': round(proba * 100, 2),
-        'shap_values': limited_shap_values,
-        'feature_names': limited_feature_names,
-        'feature_values': limited_feature_values
+        'probability': round(proba * 100, 2),  # Probabilité arrondie à deux décimales
+        'shap_values': limited_shap_values,    # Valeurs SHAP limitées
+        'feature_names': limited_feature_names,  # Noms des features limités
+        'feature_values': limited_feature_values  # Valeurs des features limitées
     })
 
 if __name__ == "__main__":
     port = os.environ.get("PORT", 5000)
     app.run(debug=False, host="0.0.0.0", port=int(port))
-
-
