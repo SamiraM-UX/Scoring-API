@@ -16,15 +16,15 @@ urls = [
 ]
 
 # Répertoire cible pour enregistrer les segments
-save_dir = "/home/scoring/Scoring-API/saved_segments/"
+save_dir = "C:/Users/samir/Scoring-API/saved_segments/"
 
 # Vérifiez si le répertoire existe, sinon créez-le
 if not os.path.exists(save_dir):
     os.makedirs(save_dir)
 
 # Télécharger chaque segment
-for i, url in enumerate(urls):
-    file_name = f"df_train_smote_part_{i}.joblib"
+for url in urls:
+    file_name = url.split("/")[-1]
     file_path = os.path.join(save_dir, file_name)
 
     if not os.path.exists(file_path):
@@ -36,3 +36,4 @@ for i, url in enumerate(urls):
             print(f"Échec du téléchargement de {file_name}. HTTP Error: {e.code} - {e.reason}")
     else:
         print(f"{file_name} existe déjà.")
+
