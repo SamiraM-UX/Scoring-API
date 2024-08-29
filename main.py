@@ -17,17 +17,15 @@ current_directory = os.path.dirname(os.path.abspath(__file__))
 model_path = os.path.join(current_directory, "saved_model", "best_lgbmb.joblib")
 model = joblib.load(model_path)
 
-# Charger tous les segments du DataFrame une seule fois au démarrage
-df_parts = []
-for i in range(10):  
-    part_path = os.path.join(current_directory, "saved_segments", f"df_train_smote_part_{i}.joblib")
-    df_part = joblib.load(part_path)
-    df_parts.append(df_part)
+# Charger les 100 premières lignes du DataFrame en dehors de la clause if __name__ == "__main__"
+# Charger le DataFrame à partir du fichier CSV ou Joblib, selon ce qui est nécessaire
+csv_filename = os.path.join(current_directory, 'df_train_corrected_100rows.csv')
 
-# Combiner les segments en un seul DataFrame
-df_train_smote = pd.concat(df_parts, ignore_index=True)
-
-print("Modèle et DataFrame chargés avec succès.")
+if os.path.exists(csv_filename):
+    df_train_smote = pd.read_csv(csv_filename)
+else:
+    joblib_filename = os.path.join(current_directory, 'df_train_smote_corrected_100rows.joblib')
+    df_train_smote = joblib.load(joblib_filename)
 
 @app.route("/")
 def home():
