@@ -9,16 +9,16 @@ warnings.filterwarnings("ignore", message="LightGBM binary classifier with TreeE
 # Initialisation de l'application Flask
 app = Flask(__name__)
 
-# Définir le répertoire courant sur PythonAnywhere
-current_directory = "/home/scoring/Scoring-API"  # Remplacez par le bon chemin si nécessaire
+# Définir le répertoire courant sur votre machine locale Windows
+current_directory = "C:/Users/samir/OneDrive/Bureau/Projet7/MAHJOUB_Samira_dossier_code_082024/Model"
 
 # Charger le modèle en dehors de la clause if __name__ == "__main__":
-model_path = os.path.join(current_directory, "saved_model", "best_lgbmb.joblib")
+model_path = os.path.join(current_directory, "best_lgbmb.joblib")
 model = joblib.load(model_path)
 
 # Charger le DataFrame corrigé avec SK_ID_CURR
-df_train_smote_path = os.path.join(current_directory, "saved_model", "df_train_smote_corrected.joblib")
-df_train_smote = joblib.load(df_train_smote_path)
+df_train_smote_path = os.path.join(current_directory, "df_train_corrected_100rows.csv")
+df_train_smote = pd.read_csv(df_train_smote_path)
 
 print("Modèle et DataFrame chargés avec succès.")
 
@@ -69,3 +69,4 @@ def predict():
 if __name__ == "__main__":
     port = os.environ.get("PORT", 5000)
     app.run(debug=False, host="0.0.0.0", port=int(port))
+
