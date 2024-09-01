@@ -68,11 +68,17 @@ if st.button("Prédire"):
                     # Obtenir la probabilité prédite
                     prediction_proba = model.predict_proba(sample_for_prediction)
                     probability = prediction_proba[0][1]  # Probabilité de la classe positive
+
+                    # Définir le seuil de décision
+                    seuil_defaut = 0.5  # Par exemple, 50%
+                    defaillant = int(probability >= seuil_defaut)  # 1 si défaillant, 0 sinon
+                    
+                    # Afficher les résultats
                     st.write(f"Probabilité prédite : {probability * 100:.2f}%")
+                    st.write(f"Le client est {'défaillant' if defaillant == 1 else 'non défaillant'} (classification: {defaillant})")
             except KeyError as e:
                 st.write(f"Erreur de colonne manquante ou incorrecte : {e}")
             except ValueError as e:
                 st.write(f"Erreur de prédiction : {e}")
     except ValueError:
         st.error("Veuillez entrer un ID valide.")
-
