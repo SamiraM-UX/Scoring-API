@@ -4,4 +4,3 @@ joblib
 shap
 flask
 lightgbm
-scikit-learn==1.2.2
