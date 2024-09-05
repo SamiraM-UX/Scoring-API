@@ -4,4 +4,8 @@ joblib==1.0.1
 shap==0.39.0
 lightgbm==3.2.1
 gunicorn==20.1.0
-numpy==1.21.4
+numpy==1.19.5  # Version recommandée pour éviter les problèmes de compilation
+pip==24.2  # Dernière version de pip
+setuptools==65.5.1  # Mise à jour de setuptools pour une gestion plus fluide
+wheel==0.40.0  # Ajout de wheel pour aider avec les wheels Python
+
