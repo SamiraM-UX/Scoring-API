@@ -1,4 +1,2 @@
-libatlas-base-dev
-libblas-dev
-liblapack-dev
-gfortran
+pkg-config
+libcairo2-dev
