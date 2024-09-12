@@ -93,7 +93,7 @@ def predict():
     print("Réponse générée avec succès")
 
     return jsonify({
-        'probability': round(proba * 100, 2),
+        'probability': proba ,
         'shap_values': limited_shap_values,
         'feature_names': limited_feature_names,
         'feature_values': limited_feature_values
