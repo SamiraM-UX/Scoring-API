@@ -93,7 +93,7 @@ if col1.button("Run") or state["data_received"]:
 
     if not state["data_received"]:
         # Appel à l'API pour la prédiction
-        response = requests.get(f"http://localhost:5000/predict?SK_ID_CURR={sk_id_curr}")
+        response = requests.get(f"https://samira22-2647ff0d4b2a.herokuapp.com/predict?SK_ID_CURR={sk_id_curr}")
         if response.status_code != 200:
             st.error(f"Erreur lors de l'appel à l'API: {response.status_code}")
             st.stop()
