@@ -8,4 +8,5 @@ numpy
 pip
 setuptools
 wheel
+plotly
 
