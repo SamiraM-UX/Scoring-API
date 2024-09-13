@@ -20,7 +20,7 @@ model = joblib.load(model_path)
 print("Modèle chargé avec succès")
 
 # Charger le DataFrame
-df_train_smote_path = os.path.join(current_directory, "saved_model", "df_train_smote_corrected_100rows_with_id.joblib")
+df_train_smote_path = os.path.join(current_directory, "saved_model", "df_train_smote_corrected_100rows.joblib")
 print(f"Chargement du DataFrame depuis {df_train_smote_path}")
 df_train_smote = joblib.load(df_train_smote_path)
 print("DataFrame chargé avec succès")
@@ -57,14 +57,6 @@ def predict():
         print(f"Erreur : Aucun échantillon trouvé pour SK_ID_CURR: {sk_id_curr}")
         return jsonify({"error": f"Aucun échantillon trouvé pour SK_ID_CURR: {sk_id_curr}"}), 404
 
-
-    # Mapping des noms de colonnes
-    columns_mapping = {i: f"Column_{i}" for i in range(len(sample.columns))}
-
-    # Renommer les colonnes du DataFrame
-    sample.rename(columns=columns_mapping, inplace=True)
-
-    print(f"Colonnes après renommage : {sample.columns.tolist()}")
 
     # Garder uniquement les colonnes attendues par le modèle
     sample_for_prediction = sample[model_columns]
@@ -103,6 +95,4 @@ if __name__ == "__main__":
     port = os.environ.get("PORT", 5000)
     print(f"Lancement de l'application sur le port {port}")
     app.run(debug=False, host="0.0.0.0", port=int(port))
-
-
 
