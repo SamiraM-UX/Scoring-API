@@ -1,13 +1,11 @@
 Flask
-joblib
-shap
-lightgbm
 gunicorn
+joblib
 numpy
-pip
-setuptools
-wheel
-plotly
 pandas
 scikit-learn
+shap
+lightgbm
+plotly
+
 
