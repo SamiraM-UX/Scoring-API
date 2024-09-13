@@ -1,4 +1,4 @@
-Flask
+Flask==2.0.1
 joblib
 shap
 lightgbm
@@ -8,6 +8,6 @@ pip
 setuptools
 wheel
 plotly
-pandas
-scikit-learn
+pandas==1.5.1
+scikit-learn==1.5.1
 
