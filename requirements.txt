@@ -3,11 +3,11 @@ joblib
 shap
 lightgbm
 gunicorn
-numpy
+numpy==1.21.0
 pip
 setuptools
 wheel
 plotly
-pandas==1.5.1
+pandas==1.3.0
 scikit-learn==1.5.1
 
